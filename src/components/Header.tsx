@@ -50,7 +50,17 @@ export function Header() {
         </nav>
 
         {/* CTA */}
-        <Button className="gradient-primary hover:opacity-90 text-white shadow-lg">
+        <Button 
+          className="gradient-primary hover:opacity-90 text-white shadow-lg"
+          onClick={() => {
+            window.dispatchEvent(new CustomEvent('show-toast', { 
+              detail: { 
+                title: "Coming Soon", 
+                description: "The Go Live feature is currently in development. Stay tuned!" 
+              } 
+            }));
+          }}
+        >
           <Radio className="h-4 w-4 mr-2" />
           Go Live
         </Button>

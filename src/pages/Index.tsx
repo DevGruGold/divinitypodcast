@@ -16,9 +16,10 @@ const Index = () => {
     currentTurnIndex, 
     togglePlayPause, 
     next, 
-    previous, 
-    seek, 
-    reset 
+    previous,
+    onSeek,
+    reset,
+    play
   } = useAudioPlayback(conversation);
 
   const currentEpisode = currentEpisodeId ? getEpisodeById(currentEpisodeId) : null;
@@ -43,11 +44,14 @@ const Index = () => {
   useEffect(() => {
     if (conversation.length > 0 && !isPlaying && currentTurnIndex === 0) {
       const timer = setTimeout(() => {
-        togglePlayPause();
+        // Only play if we're not already playing
+        // This handles the case where the user might have manually paused
+        // or if the audio is still loading
+        play();
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [conversation.length]);
+  }, [conversation.length, play]);
 
   return (
     <div className="min-h-screen bg-background dark">
