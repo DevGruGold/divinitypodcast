@@ -1,5 +1,25 @@
 import { Character } from "@/types/godcast";
 
+// ElevenLabs voice IDs for each character
+export const characterVoices: Record<string, string> = {
+  "plato": "JBFqnCBsd6RMkjVDRZzb", // George - Authoritative, scholarly
+  "buddha": "nPczCjzI2devNBz1zQrb", // Brian - Calm, measured
+  "morpheus": "onwK4e9ZLuTAKqWW03F9", // Daniel - Deep, enigmatic
+  "alan-watts": "CwhRBWXzGAHq8TQ4Fs17", // Roger - Warm, conversational
+  "socrates": "pqHfZKP75CvOlQylNhV4", // Bill - Questioning, wise
+  "nietzsche": "cjVigY5qzO86Huf0OWal", // Eric - Intense, provocative
+  "confucius": "TX3LPaxmHKxFdv7VOQHJ", // Liam - Wise, measured
+  "marcus-aurelius": "iP95p4xoKVk53GoZ742B", // Chris - Stoic, commanding
+  "gandhi": "N2lVS1w4EtoT3dr4eOWO", // Callum - Gentle, firm
+  "yoda": "IKne3meq5aSn9XLyUdCD", // Charlie - Unique, wise
+  "carl-jung": "bIHbv24MWmeRgasZH58o", // Will - Deep, thoughtful
+  "lao-tzu": "SAz9YHcvj6GT2YYXdXww", // River - Flowing, poetic
+  "einstein": "N2lVS1w4EtoT3dr4eOWO", // Callum - Curious, playful
+  "terence-mckenna": "CwhRBWXzGAHq8TQ4Fs17", // Roger - Eloquent, visionary
+  "rumi": "TX3LPaxmHKxFdv7VOQHJ", // Liam - Poetic, passionate
+  "simone-de-beauvoir": "EXAVITQu4vr4xnSDxMaL", // Sarah - Incisive, analytical
+};
+
 export const characters: Character[] = [
   {
     id: "plato",
@@ -9,7 +29,7 @@ export const characters: Character[] = [
     famousQuote: "The measure of a man is what he does with power.",
     speakingStyle: "Socratic dialogue, probing questions, uses cave allegories and ideal forms",
     avatarInitials: "PL",
-    color: "hsl(200, 70%, 50%)",
+    color: "hsl(220, 70%, 50%)",
   },
   {
     id: "buddha",
@@ -29,7 +49,7 @@ export const characters: Character[] = [
     famousQuote: "Free your mind.",
     speakingStyle: "Enigmatic, philosophical, speaks in metaphors about reality and choice",
     avatarInitials: "MO",
-    color: "hsl(120, 60%, 40%)",
+    color: "hsl(160, 60%, 40%)",
   },
   {
     id: "alan-watts",
@@ -39,7 +59,7 @@ export const characters: Character[] = [
     famousQuote: "The only way to make sense out of change is to plunge into it.",
     speakingStyle: "Witty, accessible, blends Eastern mysticism with Western humor",
     avatarInitials: "AW",
-    color: "hsl(280, 60%, 55%)",
+    color: "hsl(200, 60%, 55%)",
   },
   {
     id: "socrates",
@@ -99,7 +119,7 @@ export const characters: Character[] = [
     famousQuote: "Do or do not. There is no try.",
     speakingStyle: "Inverted syntax, cryptic wisdom, speaks of the Force and balance",
     avatarInitials: "YO",
-    color: "hsl(100, 60%, 40%)",
+    color: "hsl(120, 50%, 40%)",
   },
   {
     id: "carl-jung",
@@ -109,7 +129,7 @@ export const characters: Character[] = [
     famousQuote: "Until you make the unconscious conscious, it will direct your life.",
     speakingStyle: "Deep, symbolic, discusses archetypes, shadows, and the collective unconscious",
     avatarInitials: "CJ",
-    color: "hsl(260, 50%, 50%)",
+    color: "hsl(250, 50%, 50%)",
   },
   {
     id: "lao-tzu",
@@ -139,7 +159,7 @@ export const characters: Character[] = [
     famousQuote: "Nature loves courage.",
     speakingStyle: "Eloquent, visionary, weaves together science, mysticism, and imagination",
     avatarInitials: "TM",
-    color: "hsl(300, 70%, 50%)",
+    color: "hsl(280, 60%, 50%)",
   },
   {
     id: "rumi",
@@ -169,4 +189,8 @@ export const getCharacterById = (id: string): Character | undefined => {
 
 export const getCharactersByIds = (ids: string[]): Character[] => {
   return ids.map((id) => getCharacterById(id)).filter(Boolean) as Character[];
+};
+
+export const getVoiceIdForCharacter = (characterId: string): string => {
+  return characterVoices[characterId] || "JBFqnCBsd6RMkjVDRZzb"; // Default to George
 };
