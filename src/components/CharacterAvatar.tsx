@@ -7,6 +7,7 @@ interface CharacterAvatarProps {
   size?: "sm" | "md" | "lg" | "xl";
   showRing?: boolean;
   isActive?: boolean;
+  showSpeakingIndicator?: boolean;
 }
 
 const sizeClasses = {
@@ -21,28 +22,37 @@ export function CharacterAvatar({
   size = "md",
   showRing = false,
   isActive = false,
+  showSpeakingIndicator = false,
 }: CharacterAvatarProps) {
   return (
-    <Avatar
-      className={cn(
-        sizeClasses[size],
-        "transition-all duration-300",
-        showRing && "ring-2 ring-primary/50",
-        isActive && "ring-2 ring-accent glow-accent scale-110"
-      )}
-      style={{
-        background: character.color,
-      }}
-    >
-      {character.avatarUrl && (
-        <AvatarImage src={character.avatarUrl} alt={character.name} />
-      )}
-      <AvatarFallback
-        className="font-display font-bold text-primary-foreground"
-        style={{ backgroundColor: character.color }}
+    <div className="relative">
+      <Avatar
+        className={cn(
+          sizeClasses[size],
+          "transition-all duration-300 border-2 border-background",
+          showRing && "ring-2 ring-primary/30",
+          isActive && "ring-2 ring-primary scale-105",
+          showSpeakingIndicator && isActive && "speaking-glow"
+        )}
+        style={{
+          background: character.color,
+        }}
       >
-        {character.avatarInitials}
-      </AvatarFallback>
-    </Avatar>
+        {character.avatarUrl && (
+          <AvatarImage src={character.avatarUrl} alt={character.name} className="object-cover" />
+        )}
+        <AvatarFallback
+          className="font-bold text-white"
+          style={{ backgroundColor: character.color }}
+        >
+          {character.avatarInitials}
+        </AvatarFallback>
+      </Avatar>
+      
+      {/* Speaking indicator dot */}
+      {showSpeakingIndicator && isActive && (
+        <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-green-500 border-2 border-background live-pulse" />
+      )}
+    </div>
   );
 }

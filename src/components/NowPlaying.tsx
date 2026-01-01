@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, SkipForward, SkipBack, Volume2, Loader2 } from "lucide-react";
+import { Play, Pause, SkipForward, SkipBack, Loader2, Volume2 } from "lucide-react";
 import { Episode } from "@/types/godcast";
 import { getCharactersByIds } from "@/data/characters";
 import { CharacterAvatar } from "./CharacterAvatar";
@@ -14,6 +14,7 @@ interface NowPlayingProps {
   currentTurnIndex: number;
   isPlaying: boolean;
   isGenerating: boolean;
+  isLoadingAudio?: boolean;
   onPlayPause: () => void;
   onNext: () => void;
   onPrevious: () => void;
@@ -26,6 +27,7 @@ export function NowPlaying({
   currentTurnIndex,
   isPlaying,
   isGenerating,
+  isLoadingAudio = false,
   onPlayPause,
   onNext,
   onPrevious,
@@ -33,10 +35,11 @@ export function NowPlaying({
 }: NowPlayingProps) {
   if (!episode) {
     return (
-      <Card className="bg-card/50 backdrop-blur-sm border-border/50">
-        <CardContent className="p-6 text-center">
+      <Card className="bg-card shadow-card border-border">
+        <CardContent className="p-8 text-center">
           <div className="text-muted-foreground">
-            <p className="font-display text-lg">Select an episode to begin</p>
+            <Volume2 className="h-12 w-12 mx-auto mb-4 opacity-30" />
+            <p className="text-lg font-medium">Select an episode to begin</p>
             <p className="text-sm mt-1">Choose from the library below</p>
           </div>
         </CardContent>
@@ -55,58 +58,68 @@ export function NowPlaying({
     : 0;
 
   return (
-    <Card className="bg-card/80 backdrop-blur-sm border-border/50 overflow-hidden">
-      <CardContent className="p-6">
+    <Card className="bg-card shadow-elevated border-border overflow-hidden">
+      <CardContent className="p-8">
         {/* Episode Header */}
-        <div className="flex items-start gap-4 mb-6">
-          <div className="flex -space-x-3">
-            {participants.slice(0, 3).map((char, index) => (
+        <div className="flex items-start gap-6 mb-8">
+          <div className="flex -space-x-4">
+            {participants.slice(0, 3).map((char) => (
               <CharacterAvatar
                 key={char.id}
                 character={char}
-                size="lg"
+                size="xl"
                 isActive={currentSpeaker?.id === char.id}
               />
             ))}
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="font-display text-2xl font-bold text-foreground line-clamp-1">
+            <h2 className="text-3xl font-bold text-foreground line-clamp-1 mb-2">
               {episode.title}
             </h2>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-muted-foreground">
               {participants.map((p) => p.name).join(" • ")}
             </p>
           </div>
         </div>
 
         {/* Current Speech */}
-        <div className="mb-6 min-h-[120px]">
+        <div className="mb-8 min-h-[140px] bg-muted/30 rounded-xl p-6">
           {isGenerating ? (
-            <div className="flex flex-col items-center justify-center h-[120px] text-muted-foreground">
-              <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
+            <div className="flex flex-col items-center justify-center h-[100px] text-muted-foreground">
+              <Loader2 className="h-8 w-8 animate-spin text-primary mb-3" />
               <p className="text-sm">Generating conversation...</p>
             </div>
+          ) : isLoadingAudio ? (
+            <div className="flex flex-col items-center justify-center h-[100px] text-muted-foreground">
+              <Loader2 className="h-8 w-8 animate-spin text-primary mb-3" />
+              <p className="text-sm">Loading audio...</p>
+            </div>
           ) : currentTurn && currentSpeaker ? (
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <CharacterAvatar character={currentSpeaker} size="sm" isActive />
-                <span className="font-display font-semibold text-primary">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <CharacterAvatar 
+                  character={currentSpeaker} 
+                  size="md" 
+                  isActive 
+                  showSpeakingIndicator={isPlaying}
+                />
+                <span className="font-semibold text-lg text-foreground">
                   {currentSpeaker.name}
                 </span>
               </div>
-              <p className="text-foreground leading-relaxed pl-10">
+              <p className="text-foreground/90 leading-relaxed text-lg pl-14">
                 "{currentTurn.content}"
               </p>
             </div>
           ) : (
-            <div className="flex items-center justify-center h-[120px] text-muted-foreground">
+            <div className="flex items-center justify-center h-[100px] text-muted-foreground">
               <p>Press play to start the conversation</p>
             </div>
           )}
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-4">
+        <div className="mb-6">
           <Slider
             value={[progress]}
             max={100}
@@ -119,19 +132,20 @@ export function NowPlaying({
               }
             }}
           />
-          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+          <div className="flex justify-between text-xs text-muted-foreground mt-2">
             <span>
-              {currentTurnIndex + 1} / {conversation.length || "—"}
+              Turn {currentTurnIndex + 1} of {conversation.length || "—"}
             </span>
             <span>{episode.duration}</span>
           </div>
         </div>
 
         {/* Playback Controls */}
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-6">
           <Button
             variant="ghost"
             size="icon"
+            className="h-12 w-12"
             onClick={onPrevious}
             disabled={currentTurnIndex === 0 || isGenerating}
           >
@@ -141,15 +155,17 @@ export function NowPlaying({
           <Button
             size="lg"
             className={cn(
-              "h-14 w-14 rounded-full",
+              "h-16 w-16 rounded-full shadow-lg",
               isPlaying
-                ? "bg-accent hover:bg-accent/90"
-                : "gradient-divine hover:opacity-90"
+                ? "bg-foreground text-background hover:bg-foreground/90"
+                : "gradient-primary hover:opacity-90"
             )}
             onClick={onPlayPause}
             disabled={isGenerating || conversation.length === 0}
           >
-            {isPlaying ? (
+            {isLoadingAudio ? (
+              <Loader2 className="h-6 w-6 animate-spin" />
+            ) : isPlaying ? (
               <Pause className="h-6 w-6" />
             ) : (
               <Play className="h-6 w-6 ml-1" />
@@ -159,6 +175,7 @@ export function NowPlaying({
           <Button
             variant="ghost"
             size="icon"
+            className="h-12 w-12"
             onClick={onNext}
             disabled={currentTurnIndex >= conversation.length - 1 || isGenerating}
           >

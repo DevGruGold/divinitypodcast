@@ -1,44 +1,58 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles, Video, BookOpen } from "lucide-react";
+import { Radio, Users, Podcast, Heart } from "lucide-react";
+import { NavLink } from "./NavLink";
+import { cn } from "@/lib/utils";
+import { LucideIcon } from "lucide-react";
+
+function HeaderNavLink({ to, icon: Icon, children }: { to: string; icon: LucideIcon; children: React.ReactNode }) {
+  return (
+    <NavLink
+      to={to}
+      className="inline-flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted"
+      activeClassName="text-foreground bg-muted"
+    >
+      <Icon className="h-4 w-4" />
+      {children}
+    </NavLink>
+  );
+}
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
-      <div className="container flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-md">
+      <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="h-10 w-10 rounded-xl gradient-divine flex items-center justify-center">
-              <Sparkles className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <div className="absolute inset-0 rounded-xl gradient-divine opacity-50 blur-md -z-10" />
+          <div className="h-10 w-10 rounded-xl gradient-primary flex items-center justify-center shadow-lg">
+            <Radio className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="font-display text-xl font-bold tracking-tight text-gradient">
+            <h1 className="text-xl font-bold tracking-tight">
               GodCast
             </h1>
-            <p className="text-[10px] text-muted-foreground -mt-1">
-              Divine Conversations
+            <p className="text-[10px] text-muted-foreground -mt-0.5">
+              AI Philosophical Debates
             </p>
           </div>
         </div>
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-1">
-          <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-            <BookOpen className="h-4 w-4 mr-2" />
+          <HeaderNavLink to="/" icon={Podcast}>
             Episodes
-          </Button>
-          <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-            <Video className="h-4 w-4 mr-2" />
-            Video Studio
-          </Button>
+          </HeaderNavLink>
+          <HeaderNavLink to="/characters" icon={Users}>
+            Characters
+          </HeaderNavLink>
+          <HeaderNavLink to="/support" icon={Heart}>
+            Support
+          </HeaderNavLink>
         </nav>
 
         {/* CTA */}
-        <Button size="sm" className="gradient-divine hover:opacity-90 text-primary-foreground">
-          <Sparkles className="h-4 w-4 mr-2" />
-          Create Episode
+        <Button className="gradient-primary hover:opacity-90 text-white shadow-lg">
+          <Radio className="h-4 w-4 mr-2" />
+          Go Live
         </Button>
       </div>
     </header>
