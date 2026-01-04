@@ -5,11 +5,13 @@ import { NowPlaying } from "@/components/NowPlaying";
 import { episodes, getEpisodeById, getFeaturedEpisodes } from "@/data/episodes";
 import { useConversation } from "@/hooks/useConversation";
 import { useAudioPlayback } from "@/hooks/useAudioPlayback";
+import { useCharacterPortraits } from "@/hooks/useCharacterPortraits";
 import { Sparkles, Radio } from "lucide-react";
 
 const Index = () => {
   const [currentEpisodeId, setCurrentEpisodeId] = useState<string | null>(null);
   const { conversation, isGenerating, generateConversation, clearConversation } = useConversation();
+  const { portraits } = useCharacterPortraits();
   const { 
     isPlaying, 
     isLoading: isLoadingAudio,
@@ -85,6 +87,7 @@ const Index = () => {
             onNext={next}
             onPrevious={previous}
             onSeek={(index) => seek(index)}
+            portraits={portraits}
           />
         </section>
 
@@ -103,6 +106,7 @@ const Index = () => {
                 episode={episode}
                 onPlay={handlePlayEpisode}
                 isPlaying={currentEpisodeId === episode.id && isPlaying}
+                portraits={portraits}
               />
             ))}
           </div>
@@ -122,6 +126,7 @@ const Index = () => {
                   episode={episode}
                   onPlay={handlePlayEpisode}
                   isPlaying={currentEpisodeId === episode.id && isPlaying}
+                  portraits={portraits}
                 />
               ))}
           </div>

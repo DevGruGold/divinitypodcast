@@ -8,6 +8,7 @@ interface CharacterAvatarProps {
   showRing?: boolean;
   isActive?: boolean;
   showSpeakingIndicator?: boolean;
+  portraitUrl?: string;
 }
 
 const sizeClasses = {
@@ -23,23 +24,30 @@ export function CharacterAvatar({
   showRing = false,
   isActive = false,
   showSpeakingIndicator = false,
+  portraitUrl,
 }: CharacterAvatarProps) {
+  const imageUrl = portraitUrl || character.avatarUrl;
+  
   return (
     <div className="relative">
       <Avatar
         className={cn(
           sizeClasses[size],
-          "transition-all duration-300 border-2 border-background",
+          "transition-all duration-300 border-2 border-background overflow-hidden",
           showRing && "ring-2 ring-primary/30",
           isActive && "ring-2 ring-primary scale-105",
           showSpeakingIndicator && isActive && "speaking-glow"
         )}
         style={{
-          background: character.color,
+          background: !imageUrl ? character.color : undefined,
         }}
       >
-        {character.avatarUrl && (
-          <AvatarImage src={character.avatarUrl} alt={character.name} className="object-cover" />
+        {imageUrl && (
+          <AvatarImage 
+            src={imageUrl} 
+            alt={character.name} 
+            className="object-cover w-full h-full"
+          />
         )}
         <AvatarFallback
           className="font-bold text-white"

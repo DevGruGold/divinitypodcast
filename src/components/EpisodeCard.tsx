@@ -11,9 +11,10 @@ interface EpisodeCardProps {
   episode: Episode;
   onPlay: (episodeId: string) => void;
   isPlaying?: boolean;
+  portraits?: Record<string, string>;
 }
 
-export function EpisodeCard({ episode, onPlay, isPlaying = false }: EpisodeCardProps) {
+export function EpisodeCard({ episode, onPlay, isPlaying = false, portraits = {} }: EpisodeCardProps) {
   const participants = getCharactersByIds(episode.participants);
 
   return (
@@ -57,6 +58,7 @@ export function EpisodeCard({ episode, onPlay, isPlaying = false }: EpisodeCardP
                 key={char.id}
                 character={char}
                 size="sm"
+                portraitUrl={portraits[char.id]}
               />
             ))}
           </div>
