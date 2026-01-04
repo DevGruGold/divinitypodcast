@@ -30,6 +30,7 @@ export const characters: Character[] = [
     speakingStyle: "Socratic dialogue, probing questions, uses cave allegories and ideal forms",
     avatarInitials: "PL",
     color: "hsl(220, 70%, 50%)",
+    avatarUrl: undefined, // Will be populated from Supabase storage
   },
   {
     id: "buddha",

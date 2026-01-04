@@ -19,6 +19,7 @@ interface NowPlayingProps {
   onNext: () => void;
   onPrevious: () => void;
   onSeek: (index: number) => void;
+  portraits?: Record<string, string>;
 }
 
 export function NowPlaying({
@@ -32,6 +33,7 @@ export function NowPlaying({
   onNext,
   onPrevious,
   onSeek,
+  portraits = {},
 }: NowPlayingProps) {
   if (!episode) {
     return (
@@ -69,6 +71,7 @@ export function NowPlaying({
                 character={char}
                 size="xl"
                 isActive={currentSpeaker?.id === char.id}
+                portraitUrl={portraits[char.id]}
               />
             ))}
           </div>
@@ -102,6 +105,7 @@ export function NowPlaying({
                   size="md" 
                   isActive 
                   showSpeakingIndicator={isPlaying}
+                  portraitUrl={portraits[currentSpeaker.id]}
                 />
                 <span className="font-semibold text-lg text-foreground">
                   {currentSpeaker.name}
