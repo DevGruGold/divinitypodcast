@@ -17,7 +17,7 @@ const Index = () => {
     togglePlayPause, 
     next, 
     previous,
-    onSeek,
+    seek,
     reset,
     play
   } = useAudioPlayback(conversation);
@@ -84,7 +84,7 @@ const Index = () => {
             onPlayPause={togglePlayPause}
             onNext={next}
             onPrevious={previous}
-            onSeek={seek}
+            onSeek={(index) => seek(index)}
           />
         </section>
 
